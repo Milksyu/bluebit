@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bluebit Business &amp; e-Solutions Enterprise — Molino, Bacoor</title>
+<meta name="description" content="Apparel printing, wholesale tees, and computer/laptop sales &amp; repair in Molino III, Bacoor, Cavite.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16203a;
+    --circuit:#2f6fed;
+    --thread:#e35d33;
+    --canvas:#f3efe6;
+    --canvas-dim:#e8e2d3;
+    --charcoal:#23262b;
+    --line: rgba(22,32,58,0.14);
+    --paper-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--canvas);
+    color:var(--charcoal);
+    font-family:'Space Grotesk', sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    margin:0;
+    color:var(--ink);
+  }
+  .mono{
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+
+  /* ===== Background texture: halftone dots fading into circuit traces ===== */
+  .texture-bg{
+    position:absolute; inset:0; pointer-events:none; z-index:0; overflow:hidden;
+  }
+  .texture-bg svg{ width:100%; height:100%; }
+
+  /* ===== Header ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(243,239,230,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    height:76px;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Anton', sans-serif;
+    font-size:22px;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  .logo .dot{
+    width:11px; height:11px; border-radius:50%;
+    background:var(--circuit);
+    box-shadow:0 0 0 3px rgba(47,111,237,0.18);
+  }
+  nav.links{ display:flex; gap:36px; align-items:center; }
+  nav.links a{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    text-decoration:none;
+    color:var(--ink);
+    position:relative;
+    padding-bottom:4px;
+  }
+  nav.links a::after{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:2px;
+    background:var(--thread); transform:scaleX(0); transform-origin:right;
+    transition:transform .25s ease;
+  }
+  nav.links a:hover::after{ transform:scaleX(1); transform-origin:left; }
+  .nav-cta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px; text-transform:uppercase; letter-spacing:0.06em;
+    background:var(--ink); color:var(--canvas);
+    padding:11px 18px; text-decoration:none; white-space:nowrap;
+  }
+  .menu-btn{ display:none; }
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;
+    padding:96px 0 76px;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    position:relative; z-index:1;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:48px;
+    align-items:center;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--circuit);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:22px;
+  }
+  .eyebrow::before{ content:""; width:26px; height:1px; background:var(--circuit); }
+  .hero h1{
+    font-size:clamp(42px, 6vw, 74px);
+    line-height:0.96;
+    margin-bottom:24px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--thread);
+  }
+  .hero p.lead{
+    font-size:18px;
+    max-width:480px;
+    color:#454c58;
+    margin-bottom:34px;
+  }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:36px; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px; text-transform:uppercase; letter-spacing:0.06em;
+    padding:15px 24px;
+    text-decoration:none;
+    border:1.5px solid var(--ink);
+    transition:all .2s ease;
+  }
+  .btn-solid{ background:var(--ink); color:var(--canvas); }
+  .btn-solid:hover{ background:var(--circuit); border-color:var(--circuit); }
+  .btn-ghost{ background:transparent; color:var(--ink); }
+  .btn-ghost:hover{ background:var(--ink); color:var(--canvas); }
+
+  .hero-stats{
+    display:flex; gap:34px; padding-top:28px; border-top:1px solid var(--line);
+  }
+  .stat .num{ font-family:'Anton', sans-serif; font-size:30px; color:var(--ink); }
+  .stat .label{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:#6b7280; }
+
+  .hero-art{
+    position:relative;
+    aspect-ratio:1/1.05;
+  }
+  .hero-art svg{ width:100%; height:100%; }
+
+  /* ===== Marquee strip ===== */
+  .strip{
+    background:var(--ink);
+    color:var(--canvas);
+    overflow:hidden;
+    white-space:nowrap;
+    border-bottom:1px solid var(--line);
+  }
+  .strip-track{
+    display:inline-flex;
+    animation:marquee 26s linear infinite;
+  }
+  .strip-track span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px; letter-spacing:0.1em; text-transform:uppercase;
+    padding:14px 28px;
+    display:inline-flex; align-items:center; gap:28px;
+  }
+  .strip-track span::after{ content:"◆"; color:var(--thread); font-size:10px; }
+  @keyframes marquee{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @media (prefers-reduced-motion: reduce){ .strip-track{ animation:none; } }
+
+  /* ===== Services ===== */
+  .section{ padding:104px 0; position:relative; }
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:24px; margin-bottom:56px; border-bottom:1px solid var(--line); padding-bottom:28px;
+  }
+  .section-head h2{ font-size:clamp(32px,4vw,48px); }
+  .section-head p{ max-width:340px; color:#5a606b; font-size:15px; }
+
+  .services{
+    display:grid; grid-template-columns:1fr 1fr; gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .service{
+    background:var(--canvas);
+    padding:46px 42px;
+    position:relative;
+    transition:background .25s ease;
+  }
+  .service:hover{ background:var(--canvas-dim); }
+  .service .si{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; color:var(--thread); letter-spacing:0.08em; margin-bottom:18px; display:block;
+  }
+  .service h3{ font-size:28px; margin-bottom:14px; }
+  .service p{ color:#4c5260; font-size:15px; margin-bottom:22px; max-width:420px; }
+  .service ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; }
+  .service li{
+    font-size:14px; color:var(--charcoal);
+    display:flex; align-items:baseline; gap:10px;
+  }
+  .service li::before{
+    content:""; width:6px; height:6px; background:var(--circuit); flex:none; transform:translateY(-1px);
+  }
+  .service:nth-child(2) li::before{ background:var(--thread); }
+
+  /* ===== About / signature ===== */
+  .about{
+    display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px; align-items:center;
+  }
+  .about-art{ position:relative; }
+  .about-art svg{ width:100%; height:auto; }
+  .about-copy .eyebrow{ margin-bottom:18px; }
+  .about-copy h2{ font-size:clamp(30px,3.6vw,42px); margin-bottom:22px; line-height:1.02; }
+  .about-copy p{ color:#454c58; font-size:16px; margin-bottom:18px; max-width:480px; }
+  .about-points{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:32px; }
+  .about-points div{ border-left:2px solid var(--circuit); padding-left:14px; }
+  .about-points h4{ font-family:'JetBrains Mono', monospace; font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink); margin-bottom:6px; }
+  .about-points p{ font-size:13.5px; color:#5a606b; margin:0; }
+
+  /* ===== Reviews ===== */
+  .reviews-head{ display:flex; align-items:baseline; gap:18px; flex-wrap:wrap; }
+  .rating-badge{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Anton', sans-serif; font-size:40px; color:var(--ink);
+  }
+  .stars{ color:var(--thread); font-size:18px; letter-spacing:2px; }
+  .reviews-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:48px; }
+  .review{ background:var(--canvas); padding:34px 30px; display:flex; flex-direction:column; gap:16px; }
+  .review .stars{ font-size:14px; }
+  .review p{ font-size:15px; color:#383d46; flex:1; }
+  .review .who{ font-family:'JetBrains Mono', monospace; font-size:12px; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; display:flex; justify-content:space-between; }
+
+  /* ===== Visit / map / hours ===== */
+  .visit{
+    display:grid; grid-template-columns:1fr 1fr; gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  .visit-panel{ background:var(--canvas); padding:48px 44px; }
+  .visit-panel.dark{ background:var(--ink); color:var(--canvas); }
+  .visit-panel h3{ color:inherit; font-size:24px; margin-bottom:24px; }
+  .visit-row{ display:flex; justify-content:space-between; padding:13px 0; border-bottom:1px solid rgba(243,239,230,0.14); font-family:'JetBrains Mono', monospace; font-size:13px; text-transform:uppercase; letter-spacing:0.04em; }
+  .visit-panel:not(.dark) .visit-row{ border-bottom:1px solid var(--line); }
+  .visit-row span:first-child{ color:#9aa3c2; }
+  .visit-panel:not(.dark) .visit-row span:first-child{ color:#7d8390; }
+  .visit-row .open{ color:#7ad19a; }
+  .contact-list{ display:flex; flex-direction:column; gap:20px; }
+  .contact-item{ display:flex; gap:16px; align-items:flex-start; }
+  .contact-item .ci-label{ font-family:'JetBrains Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:#6b7280; min-width:84px; padding-top:2px;}
+  .contact-item .ci-value{ font-size:16px; color:var(--ink); }
+  .contact-item a{ text-decoration:none; border-bottom:1px solid var(--line); }
+
+  /* ===== Footer ===== */
+  footer{ background:var(--ink); color:var(--canvas); padding:64px 0 28px; }
+  .footer-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:32px; flex-wrap:wrap; padding-bottom:44px; border-bottom:1px solid rgba(243,239,230,0.15); }
+  .footer-top h2{ color:var(--canvas); font-size:clamp(28px,4vw,40px); max-width:520px; }
+  footer .btn-solid{ background:var(--canvas); color:var(--ink); border-color:var(--canvas); }
+  footer .btn-solid:hover{ background:var(--thread); border-color:var(--thread); color:var(--canvas); }
+  .footer-bottom{ display:flex; justify-content:space-between; padding-top:24px; flex-wrap:wrap; gap:12px; }
+  .footer-bottom p{ font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.04em; color:#8b91a8; margin:0; }
+
+  /* ===== Responsive ===== */
+  @media (max-width:920px){
+    nav.links{ display:none; }
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-art{ order:-1; max-width:340px; margin:0 auto; }
+    .services{ grid-template-columns:1fr; }
+    .about{ grid-template-columns:1fr; }
+    .about-art{ max-width:380px; margin:0 auto; }
+    .reviews-grid{ grid-template-columns:1fr; }
+    .visit{ grid-template-columns:1fr; }
+    .about-points{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo"><span class="dot"></span>Bluebit</div>
+    <nav class="links">
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <a class="nav-cta" href="tel:+639989876108">0998 987 6108</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="texture-bg" aria-hidden="true">
+    <svg viewBox="0 0 1200 700" preserveAspectRatio="none">
+      <defs>
+        <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1.4" fill="#16203a" opacity="0.07"/>
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="600" height="700" fill="url(#dots)"/>
+    </svg>
+  </div>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Molino III · Bacoor, Cavite</div>
+      <h1>Print your<br>brand. Power<br>your <em>machine.</em></h1>
+      <p class="lead">Bluebit is Molino's two-in-one shop — wholesale apparel &amp; corporate printing on one side, trusted PC and laptop sales &amp; repair on the other. Same counter, two crafts, one standard of work.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-solid" href="#visit">Get directions</a>
+        <a class="btn btn-ghost" href="tel:+639989876108">Call the shop</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="num">5.0</div><div class="label">Google rating</div></div>
+        <div class="stat"><div class="num">17</div><div class="label">Customer check-ins</div></div>
+        <div class="stat"><div class="num">2</div><div class="label">Crafts under one roof</div></div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="0 0 420 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- left half: halftone tee -->
+        <defs>
+          <pattern id="halftone" width="14" height="14" patternUnits="userSpaceOnUse">
+            <circle cx="3" cy="3" r="2.6" fill="#e35d33"/>
+          </pattern>
+          <clipPath id="teeClip">
+            <path d="M70 70 L150 50 L180 80 L210 80 L240 50 L320 70 L300 130 L270 115 L270 380 L120 380 L120 115 L90 130 Z"/>
+          </clipPath>
+        </defs>
+        <rect x="0" y="0" width="420" height="460" fill="transparent"/>
+        <g clip-path="url(#teeClip)">
+          <rect x="60" y="40" width="300" height="350" fill="#16203a" opacity="0.06"/>
+          <rect x="60" y="40" width="170" height="350" fill="url(#halftone)" opacity="0.85"/>
+        </g>
+        <path d="M70 70 L150 50 L180 80 L210 80 L240 50 L320 70 L300 130 L270 115 L270 380 L120 380 L120 115 L90 130 Z" stroke="#16203a" stroke-width="2.5" fill="none"/>
+        <!-- circuit traces over right side -->
+        <g stroke="#2f6fed" stroke-width="2" fill="none" opacity="0.9">
+          <path d="M230 90 H270 V150 H320 V210"/>
+          <path d="M250 130 H300 V200"/>
+          <path d="M240 250 H310 V300 H260"/>
+          <path d="M270 330 H330 V200 H300"/>
+          <circle cx="270" cy="150" r="4" fill="#2f6fed"/>
+          <circle cx="320" cy="210" r="4" fill="#2f6fed"/>
+          <circle cx="310" cy="300" r="4" fill="#2f6fed"/>
+          <circle cx="330" cy="200" r="4" fill="#2f6fed"/>
+        </g>
+        <text x="80" y="430" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2" fill="#16203a" opacity="0.6">PRINT — REPAIR — BACOOR</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="strip" aria-hidden="true">
+  <div class="strip-track">
+    <span>Tees &amp; Polos</span><span>Corporate Printing</span><span>Laptop Repair</span><span>PC Builds</span><span>Wholesale Pricing</span><span>Molino III, Bacoor</span>
+    <span>Tees &amp; Polos</span><span>Corporate Printing</span><span>Laptop Repair</span><span>PC Builds</span><span>Wholesale Pricing</span><span>Molino III, Bacoor</span>
+  </div>
+</div>
+
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What we run</h2>
+      <p>Two counters, one shop. Pick your craft — both are handled by the same hands you can trust.</p>
+    </div>
+    <div class="services">
+      <div class="service">
+        <span class="si">01 / APPAREL &amp; PRINTING</span>
+        <h3>Tees, polos &amp; corporate print runs</h3>
+        <p>Wholesale and retail t-shirts, polo shirts, and blouses, with printing services built for teams, events, and company uniforms.</p>
+        <ul>
+          <li>Wholesale &amp; retail t-shirts, polos, blouses</li>
+          <li>Corporate and bulk order printing</li>
+          <li>Custom branded merchandise — umbrellas &amp; more</li>
+        </ul>
+      </div>
+      <div class="service">
+        <span class="si">02 / COMPUTERS &amp; LAPTOPS</span>
+        <h3>PC &amp; laptop sales, repair, service</h3>
+        <p>A reliable, affordable computer repair counter — diagnostics, fixes, and units sold straight from the shop floor.</p>
+        <ul>
+          <li>Laptop &amp; desktop repair and diagnostics</li>
+          <li>PC and laptop sales</li>
+          <li>Honest pricing, fast turnaround</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about" style="background:var(--canvas-dim); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap about">
+    <div class="about-art">
+      <svg viewBox="0 0 360 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="340" height="400" fill="none" stroke="#16203a" stroke-width="1.5" opacity="0.18"/>
+        <g stroke="#16203a" stroke-width="1.4" opacity="0.5">
+          <path d="M30 60 H180 V120 H330"/>
+          <path d="M30 150 H120 V210 H280 V260"/>
+          <path d="M30 290 H200 V350 H330"/>
+        </g>
+        <g fill="#e35d33">
+          <circle cx="180" cy="120" r="5"/>
+          <circle cx="120" cy="210" r="5"/>
+          <circle cx="200" cy="350" r="5"/>
+        </g>
+        <g fill="#2f6fed">
+          <circle cx="330" cy="120" r="5"/>
+          <circle cx="280" cy="260" r="5"/>
+          <circle cx="330" cy="350" r="5"/>
+        </g>
+        <text x="40" y="400" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2" fill="#16203a" opacity="0.55">EST. MOLINO III</text>
+      </svg>
+    </div>
+    <div class="about-copy">
+      <div class="eyebrow">The shop</div>
+      <h2>One counter for what your team wears, and what your team works on.</h2>
+      <p>Bluebit Business &amp; e-Solutions Enterprise started as a printing and apparel supplier for local businesses, then grew a second line: computer and laptop sales and repair. Customers come back for both — accommodating service, superb print quality, and a repair counter neighbors call trusted and affordable.</p>
+      <div class="about-points">
+        <div>
+          <h4>Print quality</h4>
+          <p>"The quality of t-shirt printing is superb" — repeat corporate clients.</p>
+        </div>
+        <div>
+          <h4>Repair trust</h4>
+          <p>"A highly reliable and affordable computer repair shop."</p>
+        </div>
+        <div>
+          <h4>Location</h4>
+          <p>01 Molino Rd, Molino III, Bacoor — easy to find, easy to reach.</p>
+        </div>
+        <div>
+          <h4>Service</h4>
+          <p>Accommodating staff across both counters, every visit.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="reviews">
+  <div class="wrap">
+    <div class="reviews-head">
+      <div class="rating-badge">5.0</div>
+      <div>
+        <div class="stars">★★★★★</div>
+        <p style="margin:4px 0 0; font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.05em; color:#6b7280; text-transform:uppercase;">Based on Google reviews</p>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>Great service, accommodating. The quality of t-shirt printing is superb!!</p>
+        <div class="who"><span>Alecx Asinas</span><span>Local Guide</span></div>
+      </div>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>A highly reliable and affordable computer repair shop.</p>
+        <div class="who"><span>Apollo Billano</span><span>Local Guide</span></div>
+      </div>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>Trusted!</p>
+        <div class="who"><span>Ariel Asinas</span><span>Customer</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="visit" style="padding-top:0;">
+  <div class="wrap">
+    <div class="visit">
+      <div class="visit-panel dark">
+        <h3>Shop hours</h3>
+        <div class="visit-row"><span>Monday</span><span>9 AM – 7 PM</span></div>
+        <div class="visit-row"><span>Tuesday</span><span>9 AM – 7 PM</span></div>
+        <div class="visit-row"><span>Wednesday</span><span class="open">9 AM – 7 PM</span></div>
+        <div class="visit-row"><span>Thursday</span><span>9 AM – 7 PM</span></div>
+        <div class="visit-row"><span>Friday</span><span>9 AM – 7 PM</span></div>
+        <div class="visit-row"><span>Saturday</span><span>9 AM – 7 PM</span></div>
+        <div class="visit-row" style="border-bottom:none;"><span>Sunday</span><span>9 AM – 7 PM</span></div>
+      </div>
+      <div class="visit-panel">
+        <h3>Find us</h3>
+        <div class="contact-list">
+          <div class="contact-item">
+            <span class="ci-label">Address</span>
+            <span class="ci-value">01 Molino Rd, Molino III,<br>Bacoor, 4102 Cavite</span>
+          </div>
+          <div class="contact-item">
+            <span class="ci-label">Phone</span>
+            <span class="ci-value"><a href="tel:+639989876108">0998 987 6108</a></span>
+          </div>
+          <div class="contact-item">
+            <span class="ci-label">Plus code</span>
+            <span class="ci-value">CX4H+Q3 Bacoor, Cavite</span>
+          </div>
+          <div class="contact-item">
+            <span class="ci-label">Facebook</span>
+            <span class="ci-value"><a href="https://www.facebook.com/bluebit.enterprises/" target="_blank" rel="noopener">facebook.com/bluebit.enterprises</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <h2>Bring in the design,<br>or bring in the machine.</h2>
+      <a class="btn btn-solid" href="tel:+639989876108">Call 0998 987 6108</a>
+    </div>
+    <div class="footer-bottom">
+      <p>Bluebit Business &amp; e-Solutions Enterprise — Molino III, Bacoor, Cavite</p>
+      <p>Printing · Apparel · PC &amp; Laptop Repair</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
